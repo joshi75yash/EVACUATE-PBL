@@ -1,7 +1,8 @@
 #ifndef PRIORITY_QUEUE_H
 #define PRIORITY_QUEUE_H
 
-class PriorityQueue {
+class PriorityQueue
+{
 private:
     int heap[50];
     int size;
