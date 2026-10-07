@@ -9,7 +9,6 @@ void Graph::addEdge(int u, int v) {
     adj[u].push_back(v);
     adj[v].push_back(u);
 }
-
 void Graph::display() {
     for (int i = 0; i < vertices; i++) {
         cout << i << " -> ";
@@ -17,11 +16,9 @@ void Graph::display() {
         for (int node : adj[i]) {
             cout << node << " ";
         }
-
         cout << endl;
     }
 }
-
 void Graph::BFS(int start) {
     vector<bool> visited(vertices, false);
     vector<int> queue;
@@ -42,6 +39,5 @@ void Graph::BFS(int start) {
             }
         }
     }
-
     cout << endl;
 }
