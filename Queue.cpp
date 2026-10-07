@@ -1,4 +1,4 @@
-```cpp
+
 #include "Queue.h"
 #include <iostream>
 using namespace std;
@@ -178,8 +178,3 @@ public:
     void displayStatus();
 };
 
-
-
-So when `rear` reaches the end, it can **come back to the beginning** and reuse empty spaces.
-
-**This is a much better Data Structures implementation to understand because it introduces an important concept: Circular Queue.**
