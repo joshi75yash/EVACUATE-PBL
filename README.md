@@ -8,3 +8,5 @@ We model the evacuation zone as a graph, using BFS, DFS, and Dijkstra's algorith
 Users can simulate real disruptions too — adding hazards or manually blocking paths — and the system responds by searching for another viable route instead of just failing. A graphical interface ties it together, showing the map, people, routes, and hazards at a glance.
 
 For testing, we're going past the happy path: blocked exits, overcrowded corridors, even sections that get fully cut off from the rest of the graph, to see whether the system holds up under real failure conditions rather than just ideal ones.
+
+Try the interactive evacuation simulation: https://glaze-attack-bu4g0.ship.place/
