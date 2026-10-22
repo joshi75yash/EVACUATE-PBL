@@ -4,18 +4,25 @@
 class PriorityQueue
 {
 private:
-    int heap[50];
+    static const int CAPACITY = 50;
+    int heap[CAPACITY];
     int size;
 
     void heapifyUp(int index);
+    void heapifyDown(int index);
 
 public:
     PriorityQueue();
 
-    void insert(int value);
+    bool insert(int value);
     int remove();
-    bool isEmpty();
-    void display();
+
+    int peek() const;
+    bool isEmpty() const;
+    bool isFull() const;
+    int getSize() const;
+
+    void display() const;
 };
 
 #endif
