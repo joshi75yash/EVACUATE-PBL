@@ -1,47 +1,62 @@
-#include "Graph.h"
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
 
-Graph::Graph(int v) {
-    vertices = v;
-    adj.resize(vertices);
-}
+class Graph {
+private:
+    int vertices;
+    vector<vector<int>> adj;
 
-void Graph::addEdge(int u, int v) {
-    adj[u].push_back(v);
-    adj[v].push_back(u);
-}
+public:
+    Graph(int v) {
+        vertices = v;
+        adj.resize(v);
+    }
 
-void Graph::display() {
-    for (int i = 0; i < vertices; i++) {
-        cout << i << " -> ";
+    void addEdge(int u, int v) {
+        // Check if vertices are valid
+        if (u < 0 || u >= vertices ||
+            v < 0 || v >= vertices) {
+            cout << "Invalid vertex number!" << endl;
+            return;
+        }
 
-        for (int node : adj[i]) {
-            cout << node << " ";
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+
+        cout << "Edge added successfully!" << endl;
+    }
+
+    void BFS(int start) {
+        // Check starting vertex
+        if (start < 0 || start >= vertices) {
+            cout << "Invalid starting vertex!" << endl;
+            return;
+        }
+
+        vector<bool> visited(vertices, false);
+        queue<int> q;
+
+        visited[start] = true;
+        q.push(start);
+
+        cout << "BFS Traversal: ";
+
+        while (!q.empty()) {
+            int current = q.front();
+            q.pop();
+
+            cout << current << " ";
+
+            for (int neighbour : adj[current]) {
+                if (!visited[neighbour]) {
+                    visited[neighbour] = true;
+                    q.push(neighbour);
+                }
+            }
         }
 
         cout << endl;
     }
-}
-
-void Graph::BFS(int start) {
-    vector<bool> visited(vertices, false);
-    vector<int> queue;
-
-    queue.push_back(start);
-    visited[start] = true;
-
-    int index = 0;
-
-    while (index < queue.size()) {
-        int current = queue[index++];
-        cout << current << " ";
-
-        for (int node : adj[current]) {
-            if (!visited[node]) {
-                visited[node] = true;
-                queue.push_back(node);
-            }
-        }
-    }
-
-    cout << endl;
-}
+};
