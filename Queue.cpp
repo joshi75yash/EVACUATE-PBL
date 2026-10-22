@@ -1,56 +1,73 @@
-#include "Queue.h"
 #include <iostream>
 using namespace std;
 
-Queue::Queue() {
-    front = -1;
-    rear = -1;
-}
+#define MAX_SIZE 5
 
-bool Queue::isEmpty() {
-    return front == -1;
-}
+class Queue {
+private:
+    int arr[MAX_SIZE];
+    int front, rear, count;
 
-void Queue::enqueue(int value) {
-    if (rear == 49) {
-        cout << "Queue is full\n";
-        return;
-    }
-
-    if (front == -1)
+public:
+    Queue() {
         front = 0;
-
-    rear++;
-    arr[rear] = value;
-}
-
-int Queue::dequeue() {
-    if (isEmpty()) {
-        cout << "Queue is empty\n";
-        return -1;
-    }
-
-    int value = arr[front];
-
-    if (front == rear) {
-        front = -1;
         rear = -1;
-    }
-    else {
-        front++;
+        count = 0;
     }
 
-    return value;
-}
-
-void Queue::display() {
-    if (isEmpty()) {
-        cout << "Queue is empty\n";
-        return;
+    bool isEmpty() {
+        return count == 0;
     }
 
-    for (int i = front; i <= rear; i++)
-        cout << arr[i] << " ";
+    bool isFull() {
+        return count == MAX_SIZE;
+    }
 
-    cout << endl;
-}
+    void enqueue(int value) {
+        if (isFull()) {
+            cout << "Queue is full!\n";
+            return;
+        }
+
+        rear = (rear + 1) % MAX_SIZE;
+        arr[rear] = value;
+        count++;
+
+        cout << value << " inserted\n";
+    }
+
+    void dequeue() {
+        if (isEmpty()) {
+            cout << "Queue is empty!\n";
+            return;
+        }
+
+        cout << arr[front] << " removed\n";
+        front = (front + 1) % MAX_SIZE;
+        count--;
+    }
+
+    void peek() {
+        if (isEmpty()) {
+            cout << "Queue is empty!\n";
+            return;
+        }
+
+        cout << "Front element: " << arr[front] << endl;
+    }
+
+    void display() {
+        if (isEmpty()) {
+            cout << "Queue is empty!\n";
+            return;
+        }
+
+        cout << "Queue: ";
+
+        for (int i = 0; i < count; i++) {
+            cout << arr[(front + i) % MAX_SIZE] << " ";
+        }
+
+        cout << endl;
+    }
+};
