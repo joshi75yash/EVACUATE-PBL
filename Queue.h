@@ -3,16 +3,19 @@
 
 class Queue {
 private:
-    int arr[50];
-    int front;
-    int rear;
+    static const int MAX_SIZE = 5;
+    int arr[MAX_SIZE];
+    int front, rear, count;
 
 public:
     Queue();
 
-    void enqueue(int value);
-    int dequeue();
     bool isEmpty();
+    bool isFull();
+
+    void enqueue(int value);
+    void dequeue();
+    void peek();
     void display();
 };
 
