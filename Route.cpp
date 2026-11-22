@@ -15,7 +15,7 @@ void Route::display() const {
     for (std::size_t i = 0; i < path.size(); ++i) {
         std::cout << path[i];
         if (i < path.size() - 1) {
-            std::cout << " -> "; // Visual indicator for a path sequence
+            std::cout << " -> "; 
         }
     }
     std::cout << std::endl;
