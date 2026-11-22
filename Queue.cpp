@@ -1,73 +1,74 @@
 #include <iostream>
+#include "Queue.h"
+
 using namespace std;
 
-#define MAX_SIZE 5
+// Constructor
+Queue::Queue() {
+    front = 0;
+    rear = -1;
+    count = 0;
+}
 
-class Queue {
-private:
-    int arr[MAX_SIZE];
-    int front, rear, count;
+// Check whether queue is empty
+bool Queue::isEmpty() {
+    return count == 0;
+}
 
-public:
-    Queue() {
-        front = 0;
-        rear = -1;
-        count = 0;
+// Check whether queue is full
+bool Queue::isFull() {
+    return count == MAX_SIZE;
+}
+
+// Insert an element
+void Queue::enqueue(int value) {
+    if (isFull()) {
+        cout << "Queue is full! Cannot insert " << value << endl;
+        return;
     }
 
-    bool isEmpty() {
-        return count == 0;
+    rear = (rear + 1) % MAX_SIZE;
+    arr[rear] = value;
+    count++;
+
+    cout << value << " inserted successfully." << endl;
+}
+
+// Remove an element
+void Queue::dequeue() {
+    if (isEmpty()) {
+        cout << "Queue is empty! Cannot remove element." << endl;
+        return;
     }
 
-    bool isFull() {
-        return count == MAX_SIZE;
+    cout << arr[front] << " removed successfully." << endl;
+
+    front = (front + 1) % MAX_SIZE;
+    count--;
+}
+
+// View the front element
+void Queue::peek() {
+    if (isEmpty()) {
+        cout << "Queue is empty!" << endl;
+        return;
     }
 
-    void enqueue(int value) {
-        if (isFull()) {
-            cout << "Queue is full!\n";
-            return;
-        }
+    cout << "Front element: " << arr[front] << endl;
+}
 
-        rear = (rear + 1) % MAX_SIZE;
-        arr[rear] = value;
-        count++;
-
-        cout << value << " inserted\n";
+// Display all elements
+void Queue::display() {
+    if (isEmpty()) {
+        cout << "Queue is empty!" << endl;
+        return;
     }
 
-    void dequeue() {
-        if (isEmpty()) {
-            cout << "Queue is empty!\n";
-            return;
-        }
+    cout << "Queue elements: ";
 
-        cout << arr[front] << " removed\n";
-        front = (front + 1) % MAX_SIZE;
-        count--;
+    for (int i = 0; i < count; i++) {
+        cout << arr[(front + i) % MAX_SIZE] << " ";
     }
 
-    void peek() {
-        if (isEmpty()) {
-            cout << "Queue is empty!\n";
-            return;
-        }
-
-        cout << "Front element: " << arr[front] << endl;
-    }
-
-    void display() {
-        if (isEmpty()) {
-            cout << "Queue is empty!\n";
-            return;
-        }
-
-        cout << "Queue: ";
-
-        for (int i = 0; i < count; i++) {
-            cout << arr[(front + i) % MAX_SIZE] << " ";
-        }
-
-        cout << endl;
-    }
-};
+    cout << endl;
+}
