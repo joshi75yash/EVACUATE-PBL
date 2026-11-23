@@ -1,132 +1,163 @@
+    
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <climits>
 #include <algorithm>
 using namespace std;
+
+vector<pair<int,int>> graph[100];
+int vis[100] = {0};
+
+// DFS FUNCTION
+void dfs(int u)
+{
+    cout << u << " ";
+    vis[u] = 1;
+
+    for(auto e : graph[u])
+    {
+        int v = e.first;
+
+        if(!vis[v])
+            dfs(v);
+    }
+}
 
 int main()
 {
     int n, m;
 
-    cout << "===== EVACUATE - DIJKSTRA DEMO =====\n";
+    cout << "====================================\n";
+    cout << "       EVACUATE - GRAPH DEMO\n";
+    cout << "====================================\n";
 
-    cout << "Enter number of vertices: ";
+    cout << "\nEnter number of vertices: ";
     cin >> n;
-
-    if (n <= 0)
-    {
-        cout << "Invalid number of vertices.\n";
-        return 0;
-    }
-
-    vector<vector<pair<int, int>>> graph(n);
 
     cout << "Enter number of edges: ";
     cin >> m;
 
-    if (m < 0)
-    {
-        cout << "Invalid number of edges.\n";
-        return 0;
-    }
+    cout << "\nEnter edges as: source destination weight\n";
 
-    cout << "\nEnter each edge as: source destination weight\n";
-    cout << "Vertices must be numbered from 0 to " << n - 1 << ".\n";
-    cout << "Weights must be non-negative.\n";
-
-    for (int i = 0; i < m; i++)
+    for(int i=0; i<m; i++)
     {
         int u, v, w;
         cin >> u >> v >> w;
 
-        if (u < 0 || u >= n || v < 0 || v >= n || w < 0)
-        {
-            cout << "Invalid edge. Enter the graph again.\n";
-            return 0;
-        }
-
-        // Undirected graph
-        graph[u].push_back({v, w});
-        graph[v].push_back({u, w});
+        graph[u].push_back({v,w});
+        graph[v].push_back({u,w});
     }
 
-    int source, destination;
+    // DFS TRAVERSAL
 
-    cout << "\nEnter starting vertex: ";
-    cin >> source;
+    cout << "\n====================================\n";
+    cout << "          DFS TRAVERSAL\n";
+    cout << "====================================\n";
+
+    int start;
+
+    cout << "Enter starting vertex for DFS: ";
+    cin >> start;
+
+    cout << "\nDFS Traversal: ";
+    dfs(start);
+
+    cout << "\n\nDFS completed successfully!\n";
+
+    // RESET VISITED ARRAY
+
+    for(int i=0; i<n; i++)
+        vis[i] = 0;
+
+    // DIJKSTRA ALGORITHM
+
+    cout << "\n====================================\n";
+    cout << "       DIJKSTRA SHORTEST PATH\n";
+    cout << "====================================\n";
+
+    int s, destination;
+
+    cout << "Enter source vertex: ";
+    cin >> s;
 
     cout << "Enter destination vertex: ";
     cin >> destination;
 
-    if (source < 0 || source >= n ||
-        destination < 0 || destination >= n)
+    int dist[100], parent[100];
+
+    for(int i=0; i<n; i++)
     {
-        cout << "Invalid source or destination.\n";
-        return 0;
+        dist[i] = 9999;
+        parent[i] = -1;
     }
 
-    vector<int> dist(n, INT_MAX);
-    vector<int> parent(n, -1);
+    priority_queue<pair<int,int>,
+    vector<pair<int,int>>,
+    greater<pair<int,int>>> pq;
 
-    // Min-priority queue stores {distance, vertex}
-    priority_queue<pair<int, int>,
-                   vector<pair<int, int>>,
-                   greater<pair<int, int>>> pq;
+    dist[s] = 0;
+    pq.push({0,s});
 
-    dist[source] = 0;
-    pq.push({0, source});
-
-    while (!pq.empty())
+    while(!pq.empty())
     {
-        int currentDistance = pq.top().first;
         int u = pq.top().second;
+        int d = pq.top().first;
         pq.pop();
 
-        if (currentDistance != dist[u])
+        if(d != dist[u])
             continue;
 
-        for (auto edge : graph[u])
+        for(auto e : graph[u])
         {
-            int v = edge.first;
-            int weight = edge.second;
+            int v = e.first;
+            int w = e.second;
 
-            if (currentDistance <= INT_MAX - weight &&
-                currentDistance + weight < dist[v])
+            if(dist[u] + w < dist[v])
             {
-                dist[v] = currentDistance + weight;
+                dist[v] = dist[u] + w;
                 parent[v] = u;
 
-                pq.push({dist[v], v});
+                pq.push({dist[v],v});
             }
         }
     }
 
-    if (dist[destination] == INT_MAX)
+    // DISPLAY RESULT
+
+    cout << "\n====================================\n";
+    cout << "             RESULT\n";
+    cout << "====================================\n";
+
+    if(dist[destination] == 9999)
     {
-        cout << "\nNo path exists to the destination.\n";
-        return 0;
+        cout << "No path exists to destination.\n";
+    }
+    else
+    {
+        vector<int> path;
+
+        for(int v=destination; v!=-1; v=parent[v])
+            path.push_back(v);
+
+        reverse(path.begin(),path.end());
+
+        cout << "Shortest Path: ";
+
+        for(int i=0; i<path.size(); i++)
+        {
+            cout << path[i];
+
+            if(i != path.size()-1)
+                cout << " -> ";
+        }
+
+        cout << "\nTotal Path Cost: " << dist[destination];
+        cout << "\n\nShortest path calculated successfully!\n";
     }
 
-    vector<int> path;
-
-    for (int v = destination; v != -1; v = parent[v])
-        path.push_back(v);
-
-    reverse(path.begin(), path.end());
-
-    cout << "\n===== RESULT =====\n";
-    cout << "Shortest path: ";
-
-    for (int i = 0; i < (int)path.size(); i++)
-    {
-        cout << path[i];
-
-        if (i != (int)path.size() - 1)
-            cout << " -> ";
-    }
-
-    cout << "\nTotal path cost: " << dist[destination] << endl;
+    cout << "\n====================================\n";
+    cout << "          EVACUATE ENDED\n";
+    cout << "====================================\n";
 
     return 0;
 }
